@@ -18,7 +18,7 @@ app
       return res.status(500).end();
     }
 
-    fs.appendFileSync('result.csv', [
+    fs.appendFileSync('./files/result.csv', [
       req.body.teacherName,
       req.body.slotName,
       req.body.studentId
