@@ -12,16 +12,16 @@ app
   })
   .post('/save', (req, res) => {
     if (req.body.teacherName === undefined
-      || req.body.ts === undefined
-      || req.body.studentName === undefined
+      || req.body.slotName === undefined
+      || req.body.studentId === undefined
     ) {
       return res.status(500).end();
     }
 
     fs.appendFileSync('result.csv', [
       req.body.teacherName,
-      req.body.ts,
-      req.body.studentName
+      req.body.slotName,
+      req.body.studentId
     ].join(';') + "\n");
 
     res.status(200).end()
