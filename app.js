@@ -8,7 +8,7 @@ app
   .use(express.json())
   .get('/calendar', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.send(fs.readFileSync('./calendar.json'));
+    res.send(fs.readFileSync('./files/calendar.json'));
   })
   .post('/save', (req, res) => {
     if (req.body.teacherName === undefined
