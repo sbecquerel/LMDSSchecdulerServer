@@ -16,6 +16,7 @@ app
       || req.body.day === undefined
       || req.body.hour === undefined
       || req.body.minutes === undefined
+      || req.body.selected === undefined
     ) {
       return res.status(500).end();
     }
@@ -25,7 +26,8 @@ app
       req.body.studentId,
       req.body.day,
       req.body.hour,
-      req.body.minutes,      
+      req.body.minutes,
+      req.body.selected ? 1 : 0,
     ].join(';') + "\n");
 
     res.status(200).end()
