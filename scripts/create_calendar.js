@@ -3,6 +3,8 @@ const readXlsxFile = require('read-excel-file/node');
 const accents = require('remove-accents');
 const commander = require('commander');
 
+const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+
 const main = async (file, output) => {
   let calendar = {};
   const groupAndTeacherCorres = {};
@@ -14,7 +16,7 @@ const main = async (file, output) => {
       .filter(group => 
         group.teacher !== null 
         && group.teacher !== 'Prof' 
-        && group.slot.search(/(lundi|mardi|mercredi|jeudi|vendredi)/i) !== -1
+        && group.slot.search(/(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)/i) !== -1
       )
       .forEach(group => {
         if (calendar[group.teacher] === undefined) {
@@ -57,12 +59,28 @@ const main = async (file, output) => {
 
     calendar.forEach((row, index) => {
       calendar[index].slots = Object.keys(row.slots)
-        .map(slotName => ({
-          name: slotName,
-          students: row.slots[slotName].sort((a, b) => a.lastname.localeCompare(b.lastname))
-        }))
-        .filter(slot => slot.students.length)
-        .sort((a, b) => a.name.localeCompare(b.name));
+        .map(slotName => {
+          
+          const slotDef = slotName.match(/(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche) ([0-9]{1,2})h([0-9]{1,2})* - ([0-9])/i);
+
+          if (slotDef === null) {
+            return null;
+          }
+
+          return {
+            dayName: slotDef[1].toLowerCase(),
+            hour: parseInt(slotDef[2]),
+            minutes: slotDef[3] === undefined ? 0 : parseInt(slotDef[3]),
+            room: parseInt(slotDef[4]),
+            students: row.slots[slotName].sort((a, b) => a.lastname.localeCompare(b.lastname))
+          };
+        })
+        .filter(slot => slot !== null && slot.students.length !== 0)
+        .sort((a, b) => {
+          return days.indexOf(a.dayName) > days.indexOf(b.dayName)
+            || a.hour > b.hour
+            || a.minutes > b.minutes;
+        });
     });
 
     calendar = calendar.filter(teacher => teacher.slots.length);
