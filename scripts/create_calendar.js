@@ -68,7 +68,7 @@ const main = async (file, output) => {
           }
 
           return {
-            dayName: slotDef[1].toLowerCase(),
+            day: slotDef[1].toLowerCase(),
             hour: parseInt(slotDef[2]),
             minutes: slotDef[3] === undefined ? 0 : parseInt(slotDef[3]),
             room: parseInt(slotDef[4]),
@@ -77,7 +77,7 @@ const main = async (file, output) => {
         })
         .filter(slot => slot !== null && slot.students.length !== 0)
         .sort((a, b) => {
-          return days.indexOf(a.dayName) > days.indexOf(b.dayName)
+          return days.indexOf(a.day) > days.indexOf(b.day)
             || a.hour > b.hour
             || a.minutes > b.minutes;
         });
