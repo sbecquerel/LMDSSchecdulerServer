@@ -101,7 +101,6 @@ if (commander.file === undefined || commander.output === undefined) {
 
 try {
   if (fs.existsSync(commander.file) === false) {
-    console.log(`file ${commander.file} doesn't exists`);
     process.exit(1);
   } 
 
