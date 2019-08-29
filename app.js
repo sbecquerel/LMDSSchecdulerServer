@@ -22,6 +22,7 @@ app
     }
 
     fs.appendFileSync('./files/result.csv', [
+      Date.now(),
       req.body.teacherName,
       req.body.studentId,
       req.body.day,
