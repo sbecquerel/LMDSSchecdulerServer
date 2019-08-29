@@ -77,9 +77,15 @@ const main = async (file, output) => {
         })
         .filter(slot => slot !== null && slot.students.length !== 0)
         .sort((a, b) => {
-          return days.indexOf(a.day) > days.indexOf(b.day)
-            || a.hour > b.hour
-            || a.minutes > b.minutes;
+          if (a.day !== b.day) {
+            return days.indexOf(a.day) < days.indexOf(b.day) ? 0 : 1;
+          }
+
+          if (a.hour !== b.hour) {
+            return a.hour < b.hour ? 0 : 1;
+          }
+
+          return a.minutes < b.minutes ? 0 : 1;
         });
     });
 
