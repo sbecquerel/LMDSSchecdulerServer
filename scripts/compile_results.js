@@ -13,7 +13,7 @@ const daysIndex = {
   samedi: 6
 };
 
-const updateCalendar = (calendar, ts, teacher, studentId, day, hour, minutes, selected) => {
+const updateResult = (result, ts, teacher, studentId, day, hour, minutes, selected) => {
 
   const eventDate = moment(ts, 'x');
   const dayIndex = parseInt(eventDate.get('d'));
@@ -25,7 +25,7 @@ const updateCalendar = (calendar, ts, teacher, studentId, day, hour, minutes, se
   }
   */
 
-  const studentIndex = calendar.findIndex(student => student.id === studentId);
+  const studentIndex = result.findIndex(student => student.id === studentId);
   const year = parseInt(eventDate.format('YYYY'));
   const week = parseInt(eventDate.format('w'));
 
@@ -34,43 +34,43 @@ const updateCalendar = (calendar, ts, teacher, studentId, day, hour, minutes, se
       return;
     }
 
-    calendar.push({id: studentId, year: {[year]: [week]}});
+    result.push({id: studentId, year: {[year]: [week]}});
 
     return;
   }
 
-  if (calendar[studentIndex].year[year] === undefined) {
+  if (result[studentIndex].year[year] === undefined) {
     if (selected === false) {
       return;
     }
 
-    calendar[studentIndex].year[year] = [week];
+    result[studentIndex].year[year] = [week];
 
     return;
   }
 
   if (selected === false) {
 
-    calendar[studentIndex].year[year] = 
-      calendar[studentIndex].year[year].filter(currentWeek => currentWeek !== week);
+    result[studentIndex].year[year] = 
+      result[studentIndex].year[year].filter(currentWeek => currentWeek !== week);
 
     return;
   }
 
-  if (calendar[studentIndex].year[year].indexOf(week) === -1) {
-    calendar[studentIndex].year[year].push(week);
+  if (result[studentIndex].year[year].indexOf(week) === -1) {
+    result[studentIndex].year[year].push(week);
   }
 }
 
 const main = async (file, output) => {
 
-  const calendar = JSON.parse(fs.readFileSync(output)) ;
+  const result = JSON.parse(fs.readFileSync(output)) ;
 
   fs.createReadStream(file)
     .pipe(csv({separator: ';', headers: false}))
     .on('data', (data) => {
-      updateCalendar(
-        calendar,
+      updateResult(
+        result,
         parseInt(data[0]),
         data[1],
         parseInt(data[2]),
@@ -81,8 +81,7 @@ const main = async (file, output) => {
       );
     })
     .on('end', () => {
-      console.log(calendar);
-      fs.writeFileSync(output, JSON.stringify(calendar));
+      fs.writeFileSync(output, JSON.stringify(result));
       fs.renameSync(file, `${file}.${moment().format('x')}`);
     });
 }
@@ -101,6 +100,7 @@ if (commander.file === undefined || commander.output === undefined) {
 
 try {
   if (fs.existsSync(commander.file) === false) {
+    console.log(`file ${commander.file} doesn't exists`);
     process.exit(1);
   } 
 
