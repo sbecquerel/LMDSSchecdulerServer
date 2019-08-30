@@ -94,13 +94,13 @@ commander
   .parse(process.argv);
 
 if (commander.file === undefined || commander.output === undefined) {
-  console.log("file and output are required");
+  console.log("Error: file and output are required");
   process.exit(1);
 }
 
 try {
   if (fs.existsSync(commander.file) === false) {
-    console.log(`file ${commander.file} doesn't exists`);
+    console.log(`Error: file "${commander.file}" doesn't exists`);
     process.exit(1);
   } 
 

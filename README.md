@@ -8,3 +8,8 @@ Create result
 ```console
 $ node scripts/compile_results.js -f files/result.csv -o files/result.json
 ```
+
+Create 
+```console
+$ node scripts/result_to_excel.js -c files/calendar.json -r files/result.json -o files/result.xlsx
+```
