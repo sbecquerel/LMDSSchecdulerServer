@@ -16,7 +16,7 @@ app
     }
 
     const matchRes = authorization.match(/^Bearer ([A-Z0-9]+)$/);
-    if (matchRes.length != 2) {
+    if (matchRes === null || matchRes.length != 2) {
       return res.status(403).end();
     }
 
