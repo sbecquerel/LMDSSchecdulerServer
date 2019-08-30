@@ -3,12 +3,38 @@ const express = require('express');
 const server = require('http').createServer(app);
 const fs = require('fs');
 
+const AUTH_TOKEN = '03DCB31856300AB56FB7313AEB664C76';
+
 app
   .use(express.urlencoded({ extended: true }))
   .use(express.json())
+  .use((req, res, next) => {
+    const authorization = req.header('Authorization');
+
+    if (authorization === undefined) {
+      return res.status(403).end();
+    }
+
+    const matchRes = authorization.match(/^Bearer ([A-Z0-9]+)$/);
+    if (matchRes.length != 2) {
+      return res.status(403).end();
+    }
+
+    const token = matchRes[1];
+
+    if (token !== AUTH_TOKEN) {
+      return res.status(403).end();
+    }
+
+    next();
+  })
   .get('/calendar', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(fs.readFileSync('./files/calendar.json'));
+  })
+  .get('/result', (req, res) => {
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.send(fs.readFileSync('./files/result.xlsx'));
   })
   .post('/save', (req, res) => {
     if (req.body.teacherName === undefined
