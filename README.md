@@ -16,5 +16,5 @@ $ node scripts/update_db.js -f files/result.csv -o files/db.json
 
 Create excel file
 ```console
-$ node scripts/db_to_excel.js -c files/db.json -r files/result.json -o files/result.xlsx
+$ node scripts/db_to_excel.js -c files/calendar.json -r files/db.json -o files/result.xlsx
 ```

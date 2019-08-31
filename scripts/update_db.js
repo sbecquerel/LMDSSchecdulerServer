@@ -82,7 +82,7 @@ const main = async (file, output) => {
     })
     .on('end', () => {
       fs.writeFileSync(output, JSON.stringify(result));
-      console.log(`Save db to ${ouput}`);
+      console.log(`Save db to ${output}`);
       
       const savingFile = `${file}.${moment().format('x')}`;
 
