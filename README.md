@@ -1,7 +1,7 @@
 # LMDSSchedulerServer
 Download file
 ```console
-node scripts/download_file.js -t 1234ABCDE -o files/data.xlsx
+$ node scripts/download_file.js -t 1234ABCDE -o files/data.xlsx
 ```
 
 Create calendar
