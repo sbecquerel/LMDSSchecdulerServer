@@ -20,9 +20,11 @@
     "body-parser": "^1.19.0",
     "commander": "^3.0.0",
     "csv-parser": "^2.3.0",
+    "dropbox": "^4.0.30",
     "excel4node": "^1.7.2",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
+    "isomorphic-fetch": "^2.2.1",
     "moment": "^2.24.0",
     "read-excel-file": "^4.0.2",
     "remove-accents": "^0.4.2"

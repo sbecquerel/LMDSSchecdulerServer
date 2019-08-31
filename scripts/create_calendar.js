@@ -22,8 +22,8 @@ const main = async (file, output) => {
         if (calendar[group.teacher] === undefined) {
           calendar[group.teacher] = {};
         }
-        calendar[group.teacher][group.slot] = [];
-        groupAndTeacherCorres[group.slot] = group.teacher;
+        calendar[group.teacher][group.slot.toLowerCase()] = [];
+        groupAndTeacherCorres[group.slot.toLowerCase()] = group.teacher;
       });
 
     (await readXlsxFile(file, { sheet: 'Elèves' }))
@@ -36,17 +36,23 @@ const main = async (file, output) => {
       }))
       .filter(student => typeof student.status === 'string' && student.status.toUpperCase() === 'ACTIF')
       .forEach(student => {
-        if (groupAndTeacherCorres[student.slot] === undefined) {
+        if (student.slot === null) {
           return;
         }
 
-        const teacher = groupAndTeacherCorres[student.slot];
+        const slot = student.slot.toLowerCase();
 
-        if (calendar[teacher] === undefined || calendar[teacher][student.slot] === undefined) {
+        if (groupAndTeacherCorres[slot] === undefined) {
           return;
         }
 
-        calendar[groupAndTeacherCorres[student.slot]][student.slot].push({
+        const teacher = groupAndTeacherCorres[slot];
+
+        if (calendar[teacher] === undefined || calendar[teacher][slot] === undefined) {
+          return;
+        }
+
+        calendar[groupAndTeacherCorres[slot]][slot].push({
           id: student.id,
           firstname: student.firstname,
           lastname: student.lastname
@@ -92,6 +98,8 @@ const main = async (file, output) => {
     calendar = calendar.filter(teacher => teacher.slots.length);
 
     fs.writeFileSync(output, JSON.stringify(calendar)); 
+
+    console.log(`Info: data saved to file ${output}`);
 
   } catch (error) {
     console.log(error);
