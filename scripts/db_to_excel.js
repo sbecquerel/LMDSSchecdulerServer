@@ -98,7 +98,7 @@ const main = async (calendar, result, outputFile) => {
   const ws = wb.addWorksheet('Présence');
   const boundaries = getBoundaries(result);
 
-  result.sort((a, b) => a.id < b.id);
+  result.sort((a, b) => a.id < b.id ? -1 : 1);
  
   const indexSaving = createHeader(ws, boundaries);
   

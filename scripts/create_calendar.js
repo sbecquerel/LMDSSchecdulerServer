@@ -95,14 +95,14 @@ const main = async (file, output) => {
         .filter(slot => slot !== null && slot.students.length !== 0)
         .sort((a, b) => {
           if (a.day !== b.day) {
-            return days.indexOf(a.day) < days.indexOf(b.day) ? 0 : 1;
+            return days.indexOf(a.day) < days.indexOf(b.day) ? -1 : 1;
           }
 
           if (a.hour !== b.hour) {
-            return a.hour < b.hour ? 0 : 1;
+            return a.hour < b.hour ? -1 : 1;
           }
 
-          return a.minutes < b.minutes ? 0 : 1;
+          return a.minutes < b.minutes ? -1 : 1;
         });
     });
 
