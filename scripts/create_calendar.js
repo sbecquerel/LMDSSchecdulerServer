@@ -32,8 +32,8 @@ const main = async (file, output) => {
       process.exit(1);
     }
 
-    console.log(`Info: found ${Object.keys(calendar)} teachers`);
-    console.log(`Info: found ${Object.keys(groupAndTeacherCorres)} slots`);
+    console.log(`Info: found ${Object.keys(calendar).length} teachers`);
+    console.log(`Info: found ${Object.keys(groupAndTeacherCorres).length} slots`);
 
     (await readXlsxFile(file, { sheet: 'Elèves' }))
       .map(row => ({
