@@ -68,7 +68,7 @@ const main = async (file, output) => {
 
   fs.createReadStream(file)
     .pipe(csv({separator: ';', headers: false}))
-    .on('data', (data) => {
+    .on('data', data => {
       updateResult(
         result,
         parseInt(data[0]),
@@ -82,12 +82,12 @@ const main = async (file, output) => {
     })
     .on('end', () => {
       fs.writeFileSync(output, JSON.stringify(result));
-      console.log(`Save db to ${output}`);
+      console.log(`Info: save db to ${output}`);
       
       const savingFile = `${file}.${moment().format('x')}`;
 
       fs.renameSync(file, savingFile);
-      console.log(`Save source file to ${savingFile}`);
+      console.log(`Info: save source file to ${savingFile}`);
     });
 }
 
@@ -117,4 +117,5 @@ try {
   
 } catch (err) {
   console.log(err);
+  process.exit(1);
 }

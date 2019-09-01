@@ -26,8 +26,8 @@ dbx.filesListFolder({path: '/lmds 2019-2020/tableurs'})
   .then(function(response) {
 
     if (response.entries.length === 0) {
-      console.log('Info: no entry found');
-      return;
+      console.log('Error: no entry found');
+      process.exit(1);
     }
 
     console.log(`Info: found ${response.entries.length} entrie(s)`);
@@ -37,8 +37,8 @@ dbx.filesListFolder({path: '/lmds 2019-2020/tableurs'})
       .filter(file => file.name.match(/\.xlsx$/));
 
     if (files.length === 0) {
-      console.log('Info: no entry found with criterias: file and .xlsx extension');
-      return;
+      console.log('Error: no entry found with criterias: file and .xlsx extension');
+      process.exit(1);
     }
 
     const file = files.reduce((selected, file) => 
@@ -51,14 +51,17 @@ dbx.filesListFolder({path: '/lmds 2019-2020/tableurs'})
     dbx.filesDownload({path: file.path_lower})
       .then(function(response){                
         console.log('Info: download ok');
+        
         fs.writeFileSync(commander.output, response.fileBinary);
         console.log(`Info: file saved to ${commander.output}`);
       })
       .catch(function (error) {
         console.error(error);
+        process.exit(1);
      });
 
   })
   .catch(function(error) {
     console.log(error);
+    process.exit(1);
   });

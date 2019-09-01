@@ -16,6 +16,7 @@ const main = async (file, output) => {
       .filter(group => 
         group.teacher !== null 
         && group.teacher !== 'Prof' 
+        && group.slot !== null
         && group.slot.search(/(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)/i) !== -1
       )
       .forEach(group => {
@@ -26,6 +27,14 @@ const main = async (file, output) => {
         groupAndTeacherCorres[group.slot.toLowerCase()] = group.teacher;
       });
 
+    if (Object.keys(calendar) === 0) {
+      console.log("Error: no data found in source file");
+      process.exit(1);
+    }
+
+    console.log(`Info: found ${Object.keys(calendar)} teachers`);
+    console.log(`Info: found ${Object.keys(groupAndTeacherCorres)} slots`);
+
     (await readXlsxFile(file, { sheet: 'Elèves' }))
       .map(row => ({
         id: row[0], 
@@ -34,7 +43,9 @@ const main = async (file, output) => {
         status: row[3], 
         slot: row[7]
       }))
-      .filter(student => typeof student.status === 'string' && student.status.toUpperCase() === 'ACTIF')
+      .filter(student => 
+        typeof student.status === 'string' 
+        && student.status.toUpperCase() === 'ACTIF')
       .forEach(student => {
         if (student.slot === null) {
           return;
@@ -97,12 +108,18 @@ const main = async (file, output) => {
 
     calendar = calendar.filter(teacher => teacher.slots.length);
 
+    if (calendar.length === 0) {
+      console.log("Error: no slots/students found in source file");
+      process.exit(1);
+    }
+
     fs.writeFileSync(output, JSON.stringify(calendar)); 
 
     console.log(`Info: data saved to file ${output}`);
 
   } catch (error) {
     console.log(error);
+    process.exit(1);
   }
 }
 
@@ -128,4 +145,5 @@ try {
   
 } catch (err) {
   console.log(err);
+  process.exit(1);
 }
