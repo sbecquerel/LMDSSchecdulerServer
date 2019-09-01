@@ -57,7 +57,11 @@ const createHeader = (ws, boundaries) => {
     let maxWeek = boundaries.max.year === year ? boundaries.max.week : getWeeksInYear(year);
     for (let week = startWeek; week <= maxWeek; week++) {
       
-      ws.cell(2, index).number(week);
+      ws.cell(2, index).number(week).style({
+        font: {
+          bold: true
+        }
+      });
 
       if (indexSaving[year] === undefined) {
         indexSaving[year] = {};
@@ -96,6 +100,11 @@ const main = async (calendar, result, outputFile) => {
   
   ws.cell(2, 1).string('id');
   ws.cell(2, 2).string('nom');
+  ws.cell(2, 1, 2, 2).style({
+    font: {
+      bold: true
+    }
+  });
   
   let row = 3;
 
@@ -103,7 +112,11 @@ const main = async (calendar, result, outputFile) => {
 
   studentList.forEach(student => {
     ws.cell(row, 1).number(student.id);
-    ws.cell(row, 2).string(`${student.firstname} ${student.lastname}`);
+    ws.cell(row, 2).string(`${student.firstname} ${student.lastname}`).style({
+      alignment: {
+        wrapText: true,
+      }
+    });
 
     const studentResult = result.find(currentResult => currentResult.id === student.id);
 
