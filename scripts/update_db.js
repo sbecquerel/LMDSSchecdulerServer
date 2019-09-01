@@ -18,12 +18,10 @@ const updateResult = (result, ts, teacher, studentId, day, hour, minutes, select
   const eventDate = moment(ts, 'x');
   const dayIndex = parseInt(eventDate.get('d'));
 
-  /*
   if (eventDate.getDay() !== daysIndex[day]) {
-    console.log('Ts day is not equal to registered day');
+    console.log('Info: ts day is not equal to registered day');
     return;
   }
-  */
 
   const studentIndex = result.findIndex(student => student.id === studentId);
   const year = parseInt(eventDate.format('YYYY'));
