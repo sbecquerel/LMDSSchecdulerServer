@@ -41,13 +41,13 @@ const main = async (file, output) => {
         firstname: row[2], 
         lastname: row[1], 
         status: row[3], 
-        slot: row[7]
+        slot: row[4]
       }))
       .filter(student => 
         typeof student.status === 'string' 
         && student.status.toUpperCase() === 'ACTIF')
       .forEach(student => {
-        if (student.slot === null) {
+        if (student.slot === null || typeof student.slot !== 'string') {
           return;
         }
 
