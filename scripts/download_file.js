@@ -8,10 +8,14 @@ commander
   .usage('[OPTIONS]...')
   .option('-t, --token <token>', 'drop box token')
   .option('-o, --output <output>', 'output file name')
+  .option('-i, --info <info>', 'info about downloaded file')
   .parse(process.argv);
 
-if (commander.token === undefined || commander.output === undefined) {
-  console.log("Error: token and output are required");
+if (commander.token === undefined 
+  || commander.output === undefined
+  || commander.info === undefined
+) {
+  console.log("Error: token, output and info are required");
   process.exit(1);
 }
 
@@ -46,14 +50,28 @@ dbx.filesListFolder({path: '/lmds 2019-2020/tableurs'})
         file : selected
     );
 
+    if (fs.existsSync(commander.info)) {
+      const downloadedFileInfo = JSON.parse(fs.readFileSync(commander.info));
+      
+      if (downloadedFileInfo.id !== undefined 
+        && downloadedFileInfo.id === file.id
+      ) {
+        console.log(`Info: file "${file.path_lower}" already downloaded`);
+        return;
+      }
+    }
+
     console.log(`Info: try to download file "${file.path_lower}"`);
 
     dbx.filesDownload({path: file.path_lower})
-      .then(function(response){                
+      .then(function(response) {
         console.log('Info: download ok');
-        
+
         fs.writeFileSync(commander.output, response.fileBinary);
         console.log(`Info: file saved to ${commander.output}`);
+        
+        fs.writeFileSync(commander.info, JSON.stringify(file));
+        console.log(`Info: info about file saved to "${commander.info}"`);
       })
       .catch(function (error) {
         console.error(error);
