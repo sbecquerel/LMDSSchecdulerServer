@@ -135,7 +135,7 @@ const main = async (calendar, result, outputFile) => {
 
   wb.write(outputFile);
 
-  console.log(`Excel file saved to ${outputFile}`);
+  console.log(`Info: Excel file saved to ${outputFile}`);
 }
 
 commander

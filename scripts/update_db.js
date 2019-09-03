@@ -97,7 +97,7 @@ commander
   .parse(process.argv);
 
 if (commander.file === undefined || commander.output === undefined) {
-  console.log("Error: file and output are required");
+  console.log("Warning: file and output are required");
   process.exit(1);
 }
 
