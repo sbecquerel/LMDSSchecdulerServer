@@ -56,8 +56,8 @@ dbx.filesListFolder({path: '/lmds 2019-2020/tableurs'})
       if (downloadedFileInfo.id !== undefined 
         && downloadedFileInfo.id === file.id
       ) {
-        console.log(`Info: file "${file.path_lower}" already downloaded`);
-        return;
+        console.log(`Warning: file "${file.path_lower}" already downloaded`);
+        process.exit(1);
       }
     }
 
