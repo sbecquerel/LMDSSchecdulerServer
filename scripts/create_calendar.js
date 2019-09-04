@@ -4,6 +4,7 @@ const accents = require('remove-accents');
 const commander = require('commander');
 
 const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+const status = ['ACTIF', 'GRATUIT', 'POSE'];
 
 const main = async (file, output) => {
   let calendar = {};
@@ -40,12 +41,10 @@ const main = async (file, output) => {
         id: row[0], 
         firstname: row[2], 
         lastname: row[1], 
-        status: row[3], 
+        status: typeof row[3] === 'string' ? accents.remove(row[3]).toUpperCase().trim() : null, 
         slot: row[4]
       }))
-      .filter(student => 
-        typeof student.status === 'string' 
-        && student.status.toUpperCase() === 'ACTIF')
+      .filter(student => status.indexOf(student.status) !== -1)
       .forEach(student => {
         if (student.slot === null || typeof student.slot !== 'string') {
           return;
@@ -66,7 +65,8 @@ const main = async (file, output) => {
         calendar[groupAndTeacherCorres[slot]][slot].push({
           id: student.id,
           firstname: student.firstname,
-          lastname: student.lastname
+          lastname: student.lastname,
+          status: student.status
         });
       });
 
