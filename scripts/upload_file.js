@@ -9,6 +9,7 @@ commander
   .usage('[OPTIONS]...')
   .option('-t, --token <token>', 'drop box token')
   .option('-f, --file <file>', 'file to upload')
+  .option('-n, --name <name>', 'file name on dropbox')
   .parse(process.argv);
 
 if (commander.token === undefined || commander.file === undefined) {
@@ -25,7 +26,7 @@ var dbx = new Dropbox({ accessToken: commander.token, fetch: fetch });
 
 dbx.filesUpload({
   contents: fs.readFileSync(commander.file),
-  path: `/lmds 2019-2020/${path.basename(commander.file)}`,
+  path: `/lmds 2019-2020/${commander.name}`,
   mode: 'overwrite'
 }).then(function(response) {
   console.log(`Info: file uploaded to "${response.path_display}"`);
