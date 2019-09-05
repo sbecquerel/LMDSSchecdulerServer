@@ -32,10 +32,6 @@ app
     res.setHeader('Content-Type', 'application/json');
     res.send(fs.readFileSync('./files/calendar.json'));
   })
-  .get('/result', (req, res) => {
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.send(fs.readFileSync('./files/result.xlsx'));
-  })
   .post('/save', (req, res) => {
     if (req.body.teacherName === undefined
       || req.body.studentId === undefined
