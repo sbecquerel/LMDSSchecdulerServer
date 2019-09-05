@@ -18,3 +18,8 @@ Create excel file
 ```console
 $ node scripts/db_to_excel.js -c files/calendar.json -r files/db.json -o files/result.xlsx
 ```
+
+Upload file
+```console
+$ node scripts/upload_file.js -t 1234ABCDE -f ./files/result.csv
+```

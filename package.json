@@ -26,6 +26,7 @@
     "fs": "0.0.1-security",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.24.0",
+    "path": "^0.12.7",
     "read-excel-file": "^4.0.2",
     "remove-accents": "^0.4.2"
   }
