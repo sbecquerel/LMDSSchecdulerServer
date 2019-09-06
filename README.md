@@ -21,5 +21,5 @@ $ node scripts/db_to_excel.js -c files/calendar.json -r files/db.json -o files/r
 
 Upload file
 ```console
-$ node scripts/upload_file.js -t 1234ABCDE -f ./files/result.csv
+$ node scripts/upload_file.js -t 1234ABCDE -f ./files/result.csv -n Résultat.csv
 ```

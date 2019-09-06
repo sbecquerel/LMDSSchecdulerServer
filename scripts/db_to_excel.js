@@ -48,19 +48,15 @@ const getBoundaries = (result) => {
 
 const createHeader = (ws, boundaries) => {  
   const indexSaving = {};
-  let index = 3;
+  let index = 5;
 
   for (let year = boundaries.min.year; year <= boundaries.max.year; year++) {
-    ws.cell(1, index).number(year).style({
-      font: {
-        bold: true
-      }
-    });
+    ws.cell(1, index).number(year).style({font: {bold: true}});
 
     let startWeek = boundaries.min.year === year ? boundaries.min.week : 1;
     let maxWeek = boundaries.max.year === year ? boundaries.max.week : getWeeksInYear(year);
-    for (let week = startWeek; week <= maxWeek; week++) {
-      
+    
+    for (let week = startWeek; week <= maxWeek; week++) {      
       ws.cell(2, index).number(week).style({
         font: {
           bold: true
@@ -82,9 +78,14 @@ const createStudentList = (calendar) => {
   const studentList = {};
 
   calendar.forEach(teacher => 
-    teacher.slots.forEach(slot => 
+    teacher.slots.forEach(slot =>
       slot.students.forEach(student => 
-        studentList[student.id] = student
+        studentList[student.id] = {
+          ...student, 
+          day: slot.day,
+          hour: slot.hour,
+          minutes: slot.minutes
+        }
       )
     )
   );
@@ -102,13 +103,10 @@ const main = async (calendar, result, outputFile) => {
  
   const indexSaving = createHeader(ws, boundaries);
   
-  ws.cell(2, 1).string('id');
-  ws.cell(2, 2).string('nom');
-  ws.cell(2, 1, 2, 2).style({
-    font: {
-      bold: true
-    }
-  });
+  ws.cell(2, 1).string('ID').style({font: {bold: true}});
+  ws.cell(2, 2).string('Nom').style({font: {bold: true}});
+  ws.cell(2, 3).string('Statut').style({font: {bold: true}});
+  ws.cell(2, 4).string('Créneau').style({font: {bold: true}});
 
   ws.column(2).setWidth(30);
   
@@ -119,6 +117,10 @@ const main = async (calendar, result, outputFile) => {
   studentList.forEach(student => {
     ws.cell(row, 1).number(student.id);
     ws.cell(row, 2).string(`${student.firstname} ${student.lastname}`);
+    ws.cell(row, 3).string(student.status);
+    ws.cell(row, 4).string(
+      `${student.day} ${student.hour}h` + (student.minutes ? student.minutes : '')
+    );
 
     const studentResult = result.find(currentResult => currentResult.id === student.id);
 
