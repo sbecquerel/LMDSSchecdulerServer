@@ -2,9 +2,27 @@ const fs = require('fs');
 const readXlsxFile = require('read-excel-file/node');
 const accents = require('remove-accents');
 const commander = require('commander');
+const moment = require('moment');
 
 const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 const status = ['ACTIF', 'GRATUIT', 'POSE'];
+
+const parseDateEval = (dateEval) => {
+  if (typeof dateEval === 'number') {
+    const parsedExcelDate = readXlsxFile.parseExcelDate(dateEval);
+    return moment(parsedExcelDate).unix();    
+  }
+
+  if (typeof dateEval === 'string') {
+    if (dateEval.match(/^[0-9]{2}\/[0-9]{2}\/[0-9]{2}$/)) {
+      return moment(dateEval, 'MM/DD/YY').unix();
+    } else if (dateEval.match(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/)) {
+      return moment(dateEval, 'MM/DD/YYYY').unix();
+    }
+  }
+
+  return null;
+}
 
 const main = async (file, output) => {
   let calendar = {};
@@ -42,7 +60,8 @@ const main = async (file, output) => {
         firstname: row[2], 
         lastname: row[1], 
         status: typeof row[3] === 'string' ? accents.remove(row[3]).toUpperCase().trim() : null, 
-        slot: row[4]
+        slot: row[4],
+        date_eval: row[14]
       }))
       .filter(student => status.indexOf(student.status) !== -1)
       .forEach(student => {
@@ -66,7 +85,8 @@ const main = async (file, output) => {
           id: student.id,
           firstname: student.firstname,
           lastname: student.lastname,
-          status: student.status
+          status: student.status,
+          date_eval: parseDateEval(student.date_eval)
         });
       });
 
