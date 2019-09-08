@@ -109,6 +109,7 @@ const main = async (calendar, result, outputFile) => {
   ws.cell(2, 4).string('Créneau').style({font: {bold: true}});
 
   ws.column(2).setWidth(30);
+  ws.column(4).setWidth(15);
   
   let row = 3;
 
