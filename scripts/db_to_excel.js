@@ -48,7 +48,7 @@ const getBoundaries = (result) => {
 
 const createHeader = (ws, boundaries) => {  
   const indexSaving = {};
-  let index = 5;
+  let index = 6;
 
   for (let year = boundaries.min.year; year <= boundaries.max.year; year++) {
     ws.cell(1, index).number(year).style({font: {bold: true}});
@@ -84,7 +84,8 @@ const createStudentList = (calendar) => {
           ...student, 
           day: slot.day,
           hour: slot.hour,
-          minutes: slot.minutes
+          minutes: slot.minutes,
+          teacher_name: teacher.name
         }
       )
     )
@@ -106,10 +107,11 @@ const main = async (calendar, result, outputFile) => {
   ws.cell(2, 1).string('ID').style({font: {bold: true}});
   ws.cell(2, 2).string('Nom').style({font: {bold: true}});
   ws.cell(2, 3).string('Statut').style({font: {bold: true}});
-  ws.cell(2, 4).string('Créneau').style({font: {bold: true}});
+  ws.cell(2, 4).string('Prof').style({font: {bold: true}});
+  ws.cell(2, 5).string('Créneau').style({font: {bold: true}});
 
   ws.column(2).setWidth(30);
-  ws.column(4).setWidth(15);
+  ws.column(5).setWidth(15);
   
   let row = 3;
 
@@ -119,7 +121,8 @@ const main = async (calendar, result, outputFile) => {
     ws.cell(row, 1).number(student.id);
     ws.cell(row, 2).string(`${student.firstname} ${student.lastname}`);
     ws.cell(row, 3).string(student.status);
-    ws.cell(row, 4).string(
+    ws.cell(row, 4).string(student.teacher_name);
+    ws.cell(row, 5).string(
       `${student.day} ${student.hour}h` + (student.minutes ? student.minutes : '')
     );
 
