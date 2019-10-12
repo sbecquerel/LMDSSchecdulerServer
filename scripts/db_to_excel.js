@@ -95,6 +95,35 @@ const createStudentList = (calendar) => {
   return Object.values(studentList)/*.sort((a, b) => a.id < b.id)*/;
 }
 
+const findClassStudentsFromStudent = (calendar, studentId) => {
+  for (let i = 0; i < calendar.length; i++) {
+    const teacher = calendar[i];
+
+    for (let j = 0; j < teacher.slots.length; j++) {       
+      const students = teacher.slots[j].students;
+      
+      if (students.find(student => student.id === studentId) !== undefined) {
+        return students.filter(student => student.id !== studentId).map(student => student.id);
+      }
+    }
+  }
+  
+  return [];
+}
+
+const studentSetForWeek = (result, studentId, year, week) => {
+  const student = result.find(student => student.id === studentId);
+  
+  if (student !== undefined
+    && student.year[year] !== undefined
+    && student.year[year].indexOf(week) !== -1
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 const main = async (calendar, result, outputFile) => {
   const wb = new xl.Workbook();
   const ws = wb.addWorksheet('Présence');
@@ -129,9 +158,15 @@ const main = async (calendar, result, outputFile) => {
     const studentResult = result.find(currentResult => currentResult.id === student.id);
 
     if (studentResult !== undefined) {
+      const classStudents = findClassStudentsFromStudent(calendar, studentResult.id);
+
       Object.keys(studentResult.year).forEach(year => {
-        studentResult.year[year].forEach(week => {
-          ws.cell(row, indexSaving[year][week]).number(1);
+        Object.keys(indexSaving[year]).forEach(week => {
+          if (studentResult.year[year].indexOf(Number(week)) !== -1) {
+            ws.cell(row, indexSaving[year][week]).number(1);
+          } else if (classStudents.find(studentId => studentSetForWeek(result, studentId, year, Number(week))) !== undefined) {
+            ws.cell(row, indexSaving[year][week]).number(0);
+          }
         })
       }) 
     }    
