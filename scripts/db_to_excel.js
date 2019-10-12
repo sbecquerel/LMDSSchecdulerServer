@@ -160,15 +160,17 @@ const main = async (calendar, result, outputFile) => {
     if (studentResult !== undefined) {
       const classStudents = findClassStudentsFromStudent(calendar, studentResult.id);
 
-      Object.keys(studentResult.year).forEach(year => {
-        Object.keys(indexSaving[year]).forEach(week => {
-          if (studentResult.year[year].indexOf(Number(week)) !== -1) {
-            ws.cell(row, indexSaving[year][week]).number(1);
-          } else if (classStudents.find(studentId => studentSetForWeek(result, studentId, year, Number(week))) !== undefined) {
-            ws.cell(row, indexSaving[year][week]).number(0);
-          }
-        })
-      }) 
+      Object.keys(indexSaving).forEach(year => {
+        if (studentResult.year[year] !== undefined) {
+          Object.keys(indexSaving[year]).forEach(week => {
+            if (studentResult.year[year].indexOf(Number(week)) !== -1) {
+              ws.cell(row, indexSaving[year][week]).number(1);
+            } else if (classStudents.find(studentId => studentSetForWeek(result, studentId, year, Number(week))) !== undefined) {
+              ws.cell(row, indexSaving[year][week]).number(0);
+            }
+          });
+        }
+      });
     }    
 
     row++;
