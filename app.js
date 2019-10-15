@@ -2,6 +2,7 @@ const app = require('express')();
 const express = require('express');
 const server = require('http').createServer(app);
 const fs = require('fs');
+const io = require('socket.io').listen(server);
 
 const AUTH_TOKEN = '03DCB31856300AB56FB7313AEB664C76';
 
@@ -58,4 +59,14 @@ app
   .use((req, res, next) => {
     res.status(404).end();
   })
-  .listen(8081);
+  
+io
+  .on('connection', (socket) => {
+    socket.on('toggleStudentStatus', (teacherName, studentId, day, hour, minutes, selected) => {
+      socket.broadcast.emit('toggleStudentStatus', teacherName, studentId, day, hour, minutes, selected);
+    })
+  });
+  
+
+server.listen(8081);
+
