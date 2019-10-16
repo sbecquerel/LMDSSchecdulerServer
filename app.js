@@ -62,7 +62,10 @@ app
   
 io
   .on('connection', (socket) => {
+    console.log('SocketIO: connection');
     socket.on('toggleStudentStatus', (teacherName, studentId, day, hour, minutes, selected) => {
+      console.log('SocketIO: receive toggleStudentStatus message. Parameters: ', teacherName, studentId, day, hour, minutes, selected);
+      console.log('SocketIO: broadcast message toggleStudentStatus');
       socket.broadcast.emit('toggleStudentStatus', teacherName, studentId, day, hour, minutes, selected);
     })
   });
