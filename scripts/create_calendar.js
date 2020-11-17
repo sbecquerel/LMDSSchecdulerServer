@@ -56,12 +56,12 @@ const main = async (file, output) => {
 
     (await readXlsxFile(file, { sheet: 'Elèves' }))
       .map(row => ({
-        id: row[0], 
-        firstname: row[2], 
-        lastname: row[1], 
-        status: typeof row[3] === 'string' ? accents.remove(row[3]).toUpperCase().trim() : null, 
-        slot: row[4],
-        date_eval: row[14]
+        id: row[1], 
+        firstname: row[3], 
+        lastname: row[2], 
+        status: typeof row[4] === 'string' ? accents.remove(row[4]).toUpperCase().trim() : null, 
+        slot: row[5],
+        date_eval: row[15]
       }))
       .filter(student => status.indexOf(student.status) !== -1)
       .forEach(student => {
