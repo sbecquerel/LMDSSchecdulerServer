@@ -22,7 +22,7 @@
     "csv-parser": "^2.3.0",
     "dropbox": "^4.0.30",
     "excel4node": "^1.7.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fs": "0.0.1-security",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.24.0",
